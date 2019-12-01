@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,8 +51,8 @@ public class UserListController extends UserController {
         }
 
         req.setAttribute("users", users);
-        req.setAttribute("allUsers", allUsers);
         req.setAttribute("addresses", addresses);
+        req.setAttribute("allUsers", allUsers);
         req.setAttribute("field", field);
         req.setAttribute("query", query);
 
