@@ -4,14 +4,13 @@ import model.User;
 import model.db.Database;
 import model.repository.UserRepository;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
 public class AuthManager {
     private static final String SESSION_CURRENT_USER = "current_user";
 
-    UserRepository userRepository;
-    HttpSession session;
+    private UserRepository userRepository;
+    private HttpSession session;
 
     public AuthManager(HttpSession session) {
         this.userRepository = new UserRepository(Database.getInstance());

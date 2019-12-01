@@ -1,8 +1,6 @@
 package controller.filter;
 
 import controller.auth.AuthManager;
-import model.db.Database;
-import model.repository.UserRepository;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
