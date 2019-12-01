@@ -22,30 +22,9 @@ public class UserListController extends UserController {
         String field = req.getParameter("field");
         String query = req.getParameter("query");
 
-        List<User> userList;
+        List<User> users = userRepository.findAll();
 
-        if (field == null || query == null || "".equals(query)) {
-            userList = userRepository.findAll();
-        } else {
-            switch (field) {
-                case "name":
-                    userList = userRepository.findAllByName(query);
-                    break;
-
-                case "address":
-                    userList = userRepository.findAllByStreetAddress(query);
-                    break;
-
-                case "best_friend":
-                    userList = userRepository.findAllByBestFriend(query);
-                    break;
-
-                default:
-                    throw new UnsupportedOperationException();
-            }
-        }
-
-        Map<String, User> users = userList
+        Map<String, User> allUsers = users
             .stream()
             .collect(Collectors.toMap(User::getUsername, Function.identity()));
 
@@ -53,7 +32,27 @@ public class UserListController extends UserController {
             .stream()
             .collect(Collectors.toMap(Address::getUsername, Function.identity()));
 
+        if (field != null && query != null && !query.equals("")) {
+            switch (field) {
+                case "name":
+                    users = userRepository.findAllByName(query);
+                    break;
+
+                case "address":
+                    users = userRepository.findAllByStreetAddress(query);
+                    break;
+
+                case "best_friend":
+                    users = userRepository.findAllByBestFriend(query);
+                    break;
+
+                default:
+                    throw new UnsupportedOperationException();
+            }
+        }
+
         req.setAttribute("users", users);
+        req.setAttribute("allUsers", allUsers);
         req.setAttribute("addresses", addresses);
         req.setAttribute("field", field);
         req.setAttribute("query", query);

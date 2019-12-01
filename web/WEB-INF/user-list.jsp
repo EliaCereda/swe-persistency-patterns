@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--@elvariable id="users" type="java.util.Map<model.User>"--%>
+<%--@elvariable id="users" type="java.util.List<model.User>"--%>
+<%--@elvariable id="allUsers" type="java.util.Map<String, model.User>"--%>
 <%--@elvariable id="addresses" type="java.util.Map<String, model.Address>"--%>
 
 <%--@elvariable id="field" type="String"--%>
@@ -69,9 +70,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${users.values()}" var="user">
+                <c:forEach items="${users}" var="user">
                     <c:set var="address" value="${addresses.get(user.username)}" />
-                    <c:set var="bestFriend" value="${users.get(user.bestFriend)}" />
+                    <c:set var="bestFriend" value="${allUsers.get(user.bestFriend)}" />
 
                     <tr>
                         <td><c:out value="${user.username}"/></td>
