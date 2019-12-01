@@ -97,23 +97,7 @@ public class UserRepository {
         "SELECT * FROM users";
 
     public List<User> findAll() {
-        List<User> users = new ArrayList<>();
-
-        try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(findAllQuery)) {
-
-            ResultSet results = stmt.executeQuery();
-
-            while (results.next()) {
-                User user = loadUser(results);
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
-        }
-
-        return users;
+        return findAllByQuery(findAllQuery, null);
     }
 
     private static final String findByUsernameQuery =
@@ -143,15 +127,39 @@ public class UserRepository {
     }
 
     private static final String findAllByNameQuery =
-        "SELECT * FROM users WHERE name = ?";
+        "SELECT * FROM users WHERE name LIKE ?";
 
     public List<User> findAllByName(String name) {
+        return findAllByQuery(findAllByNameQuery, name);
+    }
+
+    private static final String findAllByStreetAddressQuery =
+        "SELECT users.* " +
+            "FROM users JOIN addresses ON (users.username = addresses.username) " +
+            "WHERE street_address LIKE ?";
+
+    public List<User> findAllByStreetAddress(String streetAddress) {
+        return findAllByQuery(findAllByStreetAddressQuery, streetAddress);
+    }
+
+    private static final String findAllByBestFriendQuery =
+        "SELECT users.* " +
+            "FROM users JOIN users AS bf ON (users.best_friend = bf.username) " +
+            "WHERE bf.name LIKE ?";
+
+    public List<User> findAllByBestFriend(String bestFriendName) {
+        return findAllByQuery(findAllByBestFriendQuery, bestFriendName);
+    }
+
+    private List<User> findAllByQuery(String query, Object queryParam) {
         List<User> users = new ArrayList<>();
 
         try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(findAllByNameQuery)) {
+             PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            stmt.setString(1, name);
+            if (queryParam != null) {
+                stmt.setObject(1, queryParam);
+            }
 
             ResultSet results = stmt.executeQuery();
 
@@ -165,14 +173,5 @@ public class UserRepository {
         }
 
         return users;
-    }
-
-    public List<User> findAllByStreetAddress(String streetAddress) {
-        /* FIXME */
-        throw new UnsupportedOperationException();
-    }
-
-    public List<User> findAllByBestFriend(/* FIXME */) {
-        throw new UnsupportedOperationException();
     }
 }

@@ -1,0 +1,22 @@
+table {
+    border-collapse: collapse;
+}
+td, th {
+    border: 1px solid #AAA;
+    padding: 5px;
+}
+.actions form {
+    display: inline;
+}
+
+fieldset {
+    margin: 8px;
+    border: 1px solid silver;
+    padding: 8px;
+    border-radius: 4px;
+    width: max-content;
+}
+
+legend {
+    padding: 2px;
+}

@@ -13,19 +13,7 @@
 <head>
     <title><c:out value="${title}" /></title>
 
-    <style>
-        fieldset {
-            margin: 8px;
-            border: 1px solid silver;
-            padding: 8px;
-            border-radius: 4px;
-            width: max-content;
-        }
-
-        legend {
-            padding: 2px;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body>
     <h1><c:out value="${title}" /></h1>

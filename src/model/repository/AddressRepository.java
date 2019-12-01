@@ -71,7 +71,7 @@ public class AddressRepository {
     // Queries
 
     private static final String findAllQuery =
-        "SELECT * FROM users";
+        "SELECT * FROM addresses";
 
     public List<Address> findAll() {
         List<Address> addresses = new ArrayList<>();

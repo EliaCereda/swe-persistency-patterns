@@ -19,13 +19,40 @@ public class UserListController extends UserController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> users = userRepository.findAll();
+        String field = req.getParameter("field");
+        String query = req.getParameter("query");
+
+        List<User> users;
+
+        if (field == null || query == null || "".equals(query)) {
+            users = userRepository.findAll();
+        } else {
+            switch (field) {
+                case "name":
+                    users = userRepository.findAllByName(query);
+                    break;
+
+                case "address":
+                    users = userRepository.findAllByStreetAddress(query);
+                    break;
+
+                case "best_friend":
+                    users = userRepository.findAllByBestFriend(query);
+                    break;
+
+                default:
+                    throw new UnsupportedOperationException();
+            }
+        }
+
         Map<String, Address> addresses = addressRepository.findAll()
             .stream()
             .collect(Collectors.toMap(Address::getUsername, Function.identity()));
 
         req.setAttribute("users", users);
         req.setAttribute("addresses", addresses);
+        req.setAttribute("field", field);
+        req.setAttribute("query", query);
 
         getServletContext()
             .getRequestDispatcher("/WEB-INF/user-list.jsp")
