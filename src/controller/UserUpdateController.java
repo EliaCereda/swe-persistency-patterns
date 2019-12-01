@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/users/*")
 public class UserUpdateController extends UserController {
@@ -18,6 +20,11 @@ public class UserUpdateController extends UserController {
         String lastComponent = pathComponents[pathComponents.length - 1];
 
         User user = repository.findByUsername(lastComponent);
+        List<User> bestFriends = repository.findAll()
+                .parallelStream()
+                // Prevent users from being their own best friends.
+                .filter((User bestFriend) -> !bestFriend.getUsername().equals(user.getUsername()))
+                .collect(Collectors.toList());
 
         if (user == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -25,6 +32,7 @@ public class UserUpdateController extends UserController {
         }
 
         req.setAttribute("user", user);
+        req.setAttribute("bestFriends", bestFriends);
 
         getServletContext()
             .getRequestDispatcher("/WEB-INF/user-edit.jsp")
@@ -36,6 +44,7 @@ public class UserUpdateController extends UserController {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String name = req.getParameter("name");
+        String bestFriend = req.getParameter("best_friend");
 
         User user = repository.findByUsername(username);
 
@@ -46,6 +55,7 @@ public class UserUpdateController extends UserController {
 
         user.setPassword(password);
         user.setName(name);
+        user.setBestFriend(bestFriend);
 
         repository.update(user);
 

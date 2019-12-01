@@ -37,6 +37,7 @@
                     <th>Username</th>
                     <th>Password</th>
                     <th>Name</th>
+                    <th>Best Friend</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -46,6 +47,7 @@
                         <td><c:out value="${user.username}"/></td>
                         <td><c:out value="${user.password}"/></td>
                         <td><c:out value="${user.name}"/></td>
+                        <td><c:out value="${user.bestFriend}" default="(none)" /></td>
                         <td>
                             <form action="${pageContext.request.contextPath}/users/${user.username}">
                                 <button type="submit">Update</button>

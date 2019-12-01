@@ -1,10 +1,12 @@
 package model;
 
+import java.util.Objects;
+
 public class User {
     private String username;
     private String password;
     private String name;
-    private String bestFriendUsername;
+    private String bestFriend;
 
     // Accessors
 
@@ -30,5 +32,17 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBestFriend() {
+        return bestFriend;
+    }
+
+    public void setBestFriend(String bestFriend) {
+        if ("".equals(bestFriend)) {
+            bestFriend = null;
+        }
+
+        this.bestFriend = bestFriend;
     }
 }

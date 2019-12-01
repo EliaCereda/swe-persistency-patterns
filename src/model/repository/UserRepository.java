@@ -25,6 +25,7 @@ public class UserRepository {
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
         user.setName(rs.getString("name"));
+        user.setBestFriend(rs.getString("best_friend"));
 
         return user;
     }
@@ -41,8 +42,8 @@ public class UserRepository {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
-            stmt.setString(4, null);
-            // FIXME: add best friend and address
+            stmt.setString(4, user.getBestFriend());
+            // FIXME: add address
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -53,7 +54,7 @@ public class UserRepository {
 
     private static final String updateStatement =
         "UPDATE users " +
-            "SET password=?, name=? " +
+            "SET password=?, name=?, best_friend = ? " +
             "WHERE username = ?";
 
     public void update(User user) {
@@ -62,8 +63,9 @@ public class UserRepository {
 
             stmt.setString(1, user.getPassword());
             stmt.setString(2, user.getName());
-            stmt.setString(3, user.getUsername());
-            // FIXME: add best friend and address
+            stmt.setString(3, user.getBestFriend());
+            stmt.setString(4, user.getUsername());
+            // FIXME: add address
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -172,5 +174,4 @@ public class UserRepository {
     public List<User> findAllByBestFriend(/* FIXME */) {
         throw new UnsupportedOperationException();
     }
-
 }
