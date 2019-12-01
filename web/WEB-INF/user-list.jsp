@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%--@elvariable id="users" type="java.util.List<model.User>"--%>
+<%--@elvariable id="addresses" type="java.util.Map<String, model.Address>"--%>
 
 <html>
 <head>
@@ -37,16 +38,20 @@
                     <th>Username</th>
                     <th>Password</th>
                     <th>Name</th>
+                    <th>Address</th>
                     <th>Best Friend</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${users}" var="user">
+                    <c:set var="address" value="${addresses.get(user.username)}" />
+
                     <tr>
                         <td><c:out value="${user.username}"/></td>
                         <td><c:out value="${user.password}"/></td>
                         <td><c:out value="${user.name}"/></td>
+                        <td><c:out value="${address.streetAddress}" default="(none)"/></td>
                         <td><c:out value="${user.bestFriend}" default="(none)" /></td>
                         <td>
                             <form action="${pageContext.request.contextPath}/users/${user.username}">

@@ -1,5 +1,6 @@
 package controller;
 
+import model.Address;
 import model.User;
 
 import javax.servlet.ServletException;
@@ -19,19 +20,23 @@ public class UserUpdateController extends UserController {
         String[] pathComponents = url.split("/");
         String lastComponent = pathComponents[pathComponents.length - 1];
 
-        User user = repository.findByUsername(lastComponent);
-        List<User> bestFriends = repository.findAll()
-                .parallelStream()
-                // Prevent users from being their own best friends.
-                .filter((User bestFriend) -> !bestFriend.getUsername().equals(user.getUsername()))
-                .collect(Collectors.toList());
+        User user = userRepository.findByUsername(lastComponent);
 
         if (user == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
+        Address address = addressRepository.findByUser(user);
+
+        List<User> bestFriends = userRepository.findAll()
+                .parallelStream()
+                // Prevent users from being their own best friends.
+                .filter(bestFriend -> !bestFriend.getUsername().equals(user.getUsername()))
+                .collect(Collectors.toList());
+
         req.setAttribute("user", user);
+        req.setAttribute("address", address);
         req.setAttribute("bestFriends", bestFriends);
 
         getServletContext()
@@ -46,7 +51,7 @@ public class UserUpdateController extends UserController {
         String name = req.getParameter("name");
         String bestFriend = req.getParameter("best_friend");
 
-        User user = repository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
         if (user == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -57,7 +62,21 @@ public class UserUpdateController extends UserController {
         user.setName(name);
         user.setBestFriend(bestFriend);
 
-        repository.update(user);
+        userRepository.update(user);
+
+        String streetAddress = req.getParameter("street_address");
+
+        Address address = addressRepository.findByUser(user);
+
+        if (address == null) {
+            address = new Address();
+            address.setUsername(username);
+            address.setStreetAddress(streetAddress);
+            addressRepository.insert(address);
+        } else {
+            address.setStreetAddress(streetAddress);
+            addressRepository.update(address);
+        }
 
         resp.sendRedirect(req.getContextPath() + "/users");
     }

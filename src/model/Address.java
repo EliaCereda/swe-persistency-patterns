@@ -6,6 +6,14 @@ public class Address {
 
     // Accessors
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getStreetAddress() {
         return streetAddress;
     }

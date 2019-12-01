@@ -13,7 +13,7 @@ public class UserDeleteController extends UserController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
 
-        repository.deleteByUsername(username);
+        userRepository.deleteByUsername(username);
 
         resp.sendRedirect(req.getContextPath() + "/users");
     }

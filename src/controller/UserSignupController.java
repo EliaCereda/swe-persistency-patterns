@@ -1,5 +1,6 @@
 package controller;
 
+import model.Address;
 import model.User;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ public class UserSignupController extends UserController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> bestFriends = repository.findAll();
+        List<User> bestFriends = userRepository.findAll();
 
         req.setAttribute("bestFriends", bestFriends);
 
@@ -36,7 +37,16 @@ public class UserSignupController extends UserController {
         user.setName(name);
         user.setBestFriend(bestFriend);
 
-        repository.insert(user);
+        userRepository.insert(user);
+
+        String streetAddress = req.getParameter("street_address");
+
+        Address address = new Address();
+
+        address.setUsername(username);
+        address.setStreetAddress(streetAddress);
+
+        addressRepository.insert(address);
 
         resp.sendRedirect(req.getContextPath() + "/users");
     }

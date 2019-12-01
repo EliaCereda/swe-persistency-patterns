@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%--@elvariable id="user" type="model.User"--%>
+<%--@elvariable id="address" type="model.Address"--%>
 <%--@elvariable id="bestFriends" type="java.util.List<model.User>"--%>
 
 <c:set var="isUpdate" value="${(user != null) ? true : false}" />
@@ -11,6 +12,20 @@
 <html>
 <head>
     <title><c:out value="${title}" /></title>
+
+    <style>
+        fieldset {
+            margin: 8px;
+            border: 1px solid silver;
+            padding: 8px;
+            border-radius: 4px;
+            width: max-content;
+        }
+
+        legend {
+            padding: 2px;
+        }
+    </style>
 </head>
 <body>
     <h1><c:out value="${title}" /></h1>
@@ -27,6 +42,14 @@
         <p>
             <label for="name">Name: </label>
             <input type="text" name="name" id="name" value="${user.name}" required><br>
+        </p>
+
+        <p>
+            <fieldset>
+                <legend>Address</legend>
+                <label for="street_address">Street Address: </label>
+                <input type="text" name="street_address" id="street_address" value="${address.streetAddress}" required><br>
+            </fieldset>
         </p>
 
         <p>

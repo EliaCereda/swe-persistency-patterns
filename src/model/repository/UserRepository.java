@@ -1,5 +1,6 @@
 package model.repository;
 
+import model.Address;
 import model.User;
 import model.db.Database;
 
@@ -19,7 +20,7 @@ public class UserRepository {
 
     // Data Mapping
 
-    private User load(ResultSet rs) throws SQLException {
+    private User loadUser(ResultSet rs) throws SQLException {
         User user = new User();
 
         user.setUsername(rs.getString("username"));
@@ -104,7 +105,7 @@ public class UserRepository {
             ResultSet results = stmt.executeQuery();
 
             while (results.next()) {
-                User user = load(results);
+                User user = loadUser(results);
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -129,7 +130,7 @@ public class UserRepository {
             ResultSet results = stmt.executeQuery();
 
             if (results.next()) {
-                user = load(results);
+                user = loadUser(results);
             }
 
             assert !results.next();
@@ -155,7 +156,7 @@ public class UserRepository {
             ResultSet results = stmt.executeQuery();
 
             while (results.next()) {
-                User user = load(results);
+                User user = loadUser(results);
                 users.add(user);
             }
         } catch (SQLException e) {
