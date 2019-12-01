@@ -11,16 +11,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepository {
-    private Database db;
+public class UserRepository extends Repository<User> {
 
     public UserRepository(Database db) {
-        this.db = db;
+        super(db);
     }
 
     // Data Mapping
 
-    private User loadUser(ResultSet rs) throws SQLException {
+    @Override
+    protected User load(ResultSet rs) throws SQLException {
         User user = new User();
 
         user.setUsername(rs.getString("username"));
@@ -44,7 +44,6 @@ public class UserRepository {
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
             stmt.setString(4, user.getBestFriend());
-            // FIXME: add address
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -66,7 +65,6 @@ public class UserRepository {
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getBestFriend());
             stmt.setString(4, user.getUsername());
-            // FIXME: add address
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -93,72 +91,27 @@ public class UserRepository {
 
     // Queries
 
-    private static final String findAllQuery =
-        "SELECT * FROM users";
-
     public List<User> findAll() {
-        return findAllByQuery(findAllQuery);
+        return findAllByQuery("SELECT * FROM users");
     }
-
-    private static final String findByUsernameQuery =
-        "SELECT * FROM users WHERE username = ?";
 
     public User findByUsername(String username) {
-        List<User> users = findAllByQuery(findByUsernameQuery, username);
-
-        if (!users.isEmpty()) {
-            return users.get(0);
-        } else {
-            return null;
-        }
+        return findOneByQuery("SELECT * FROM users WHERE username = ?", username);
     }
-
-    private static final String findAllByNameQuery =
-        "SELECT * FROM users WHERE name LIKE ?";
 
     public List<User> findAllByName(String name) {
-        return findAllByQuery(findAllByNameQuery, name);
+        return findAllByQuery("SELECT * FROM users WHERE name LIKE ?", name);
     }
-
-    private static final String findAllByStreetAddressQuery =
-        "SELECT users.* " +
-            "FROM users JOIN addresses ON (users.username = addresses.username) " +
-            "WHERE street_address LIKE ?";
 
     public List<User> findAllByStreetAddress(String streetAddress) {
-        return findAllByQuery(findAllByStreetAddressQuery, streetAddress);
+        return findAllByQuery("SELECT users.* " +
+            "FROM users JOIN addresses ON (users.username = addresses.username) " +
+            "WHERE street_address LIKE ?", streetAddress);
     }
-
-    private static final String findAllByBestFriendQuery =
-        "SELECT users.* " +
-            "FROM users JOIN users AS bf ON (users.best_friend = bf.username) " +
-            "WHERE bf.name LIKE ?";
 
     public List<User> findAllByBestFriend(String bestFriendName) {
-        return findAllByQuery(findAllByBestFriendQuery, bestFriendName);
-    }
-
-    private List<User> findAllByQuery(String query, Object... queryParams) {
-        List<User> users = new ArrayList<>();
-
-        try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-
-            for (int i = 0; i < queryParams.length; i++) {
-                stmt.setObject(i + 1, queryParams[i]);
-            }
-
-            ResultSet results = stmt.executeQuery();
-
-            while (results.next()) {
-                User user = loadUser(results);
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
-        }
-
-        return users;
+        return findAllByQuery("SELECT users.* " +
+            "FROM users JOIN users AS bf ON (users.best_friend = bf.username) " +
+            "WHERE bf.name LIKE ?", bestFriendName);
     }
 }

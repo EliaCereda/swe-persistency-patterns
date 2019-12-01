@@ -11,16 +11,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressRepository {
-    private Database db;
+public class AddressRepository extends Repository<Address> {
 
     public AddressRepository(Database db) {
-        this.db = db;
+        super(db);
     }
 
     // Data Mapping
 
-    private Address loadAddress(ResultSet rs) throws SQLException {
+    protected Address load(ResultSet rs) throws SQLException {
         Address address = new Address();
 
         address.setUsername(rs.getString("username"));
@@ -59,7 +58,6 @@ public class AddressRepository {
 
             stmt.setString(1, address.getStreetAddress());
             stmt.setString(2, address.getUsername());
-            // FIXME: add address
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -70,53 +68,12 @@ public class AddressRepository {
 
     // Queries
 
-    private static final String findAllQuery =
-        "SELECT * FROM addresses";
-
     public List<Address> findAll() {
-        List<Address> addresses = new ArrayList<>();
-
-        try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(findAllQuery)) {
-
-            ResultSet results = stmt.executeQuery();
-
-            while (results.next()) {
-                Address address = loadAddress(results);
-                addresses.add(address);
-            }
-        } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
-        }
-
-        return addresses;
+        return findAllByQuery("SELECT * FROM addresses");
     }
 
-    private static final String findByUsernameQuery =
-            "SELECT * FROM addresses WHERE username = ?";
-
     public Address findByUsername(String username) {
-        Address address = null;
-
-        try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(findByUsernameQuery)) {
-
-            stmt.setString(1, username);
-
-            ResultSet results = stmt.executeQuery();
-
-            if (results.next()) {
-                address = loadAddress(results);
-            }
-
-            assert !results.next();
-        } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
-        }
-
-        return address;
+        return findOneByQuery("SELECT * FROM addresses WHERE username = ?", username);
     }
 
     public Address findByUser(User user) {
