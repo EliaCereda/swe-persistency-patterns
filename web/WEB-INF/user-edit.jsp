@@ -13,7 +13,7 @@
 <head>
     <title><c:out value="${title}" /></title>
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>">
 </head>
 <body>
     <h1><c:out value="${title}" /></h1>
@@ -57,7 +57,7 @@
     </form>
 
     <p>
-        Go <a href="${pageContext.request.contextPath}/">back</a>.
+        Go <a href="<c:url value="/"/>">back</a>.
     </p>
 </body>
 </html>

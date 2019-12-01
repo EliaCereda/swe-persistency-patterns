@@ -15,7 +15,7 @@
 <head>
     <title>Registered Users</title>
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>">
 
     <script>
         function deleteUser(username) {
@@ -81,10 +81,10 @@
                         <td><c:out value="${address.streetAddress}" default="(none)"/></td>
                         <td><c:out value="${bestFriend.name}" default="(none)" /></td>
                         <td class="actions">
-                            <form action="${pageContext.request.contextPath}/users/${user.username}">
+                            <form action="<c:url value="/users/${user.username}"/>">
                                 <button type="submit">Update</button>
                             </form>
-                            <form action="${pageContext.request.contextPath}/delete-user" method="post"
+                            <form action="<c:url value="/delete-user"/>" method="post"
                                   onsubmit="return deleteUser('${user.username}')">
                                 <input type="hidden" name="username" value="${user.username}">
                                 <button type="submit">Delete</button>
@@ -100,6 +100,6 @@
         </c:otherwise>
     </c:choose>
 
-    <p>Go <a href="${pageContext.request.contextPath}/">back</a>.</p>
+    <p>Go <a href="<c:url value="/"/>">back</a>.</p>
 </body>
 </html>
