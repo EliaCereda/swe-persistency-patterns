@@ -97,33 +97,20 @@ public class UserRepository {
         "SELECT * FROM users";
 
     public List<User> findAll() {
-        return findAllByQuery(findAllQuery, null);
+        return findAllByQuery(findAllQuery);
     }
 
     private static final String findByUsernameQuery =
         "SELECT * FROM users WHERE username = ?";
 
     public User findByUsername(String username) {
-        User user = null;
+        List<User> users = findAllByQuery(findByUsernameQuery, username);
 
-        try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(findByUsernameQuery)) {
-
-            stmt.setString(1, username);
-
-            ResultSet results = stmt.executeQuery();
-
-            if (results.next()) {
-                user = loadUser(results);
-            }
-
-            assert !results.next();
-        } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+        if (!users.isEmpty()) {
+            return users.get(0);
+        } else {
+            return null;
         }
-
-        return user;
     }
 
     private static final String findAllByNameQuery =
@@ -151,14 +138,14 @@ public class UserRepository {
         return findAllByQuery(findAllByBestFriendQuery, bestFriendName);
     }
 
-    private List<User> findAllByQuery(String query, Object queryParam) {
+    private List<User> findAllByQuery(String query, Object... queryParams) {
         List<User> users = new ArrayList<>();
 
         try (Connection connection = db.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            if (queryParam != null) {
-                stmt.setObject(1, queryParam);
+            for (int i = 0; i < queryParams.length; i++) {
+                stmt.setObject(i + 1, queryParams[i]);
             }
 
             ResultSet results = stmt.executeQuery();
