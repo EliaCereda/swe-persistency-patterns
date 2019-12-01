@@ -31,22 +31,18 @@ public class UserRepository {
 
     // Mutators
 
+    private static final String insertStatement =
+        "INSERT INTO users (username, password, name, best_friend) VALUES (?, ?, ?, ?);";
+
     public void insert(User user) {
-
-    }
-
-    private static final String updateQuery =
-        "UPDATE users " +
-                "SET password=?, name=? " +
-                "WHERE username = ?";
-
-    public void update(User user) {
         try (Connection connection = db.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(updateQuery)) {
+             PreparedStatement stmt = connection.prepareStatement(insertStatement)) {
 
-            stmt.setString(1, user.getPassword());
-            stmt.setString(2, user.getName());
-            stmt.setString(3, user.getUsername());
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getName());
+            stmt.setString(4, null);
+            // FIXME: add best friend and addresse
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -55,8 +51,41 @@ public class UserRepository {
         }
     }
 
-    public void deleteByUsername(String username) {
+    private static final String updateStatement =
+        "UPDATE users " +
+            "SET password=?, name=? " +
+            "WHERE username = ?";
 
+    public void update(User user) {
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(updateStatement)) {
+
+            stmt.setString(1, user.getPassword());
+            stmt.setString(2, user.getName());
+            stmt.setString(3, user.getUsername());
+            // FIXME: add best friend and address
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
+    }
+
+    private static final String deleteStatement =
+        "DELETE FROM users WHERE username = ?";
+
+    public void deleteByUsername(String username) {
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(deleteStatement)) {
+
+            stmt.setString(1, username);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
     }
 
     // Queries
@@ -136,6 +165,7 @@ public class UserRepository {
     }
 
     public List<User> findAllByStreetAddress(String streetAddress) {
+        /* FIXME */
         throw new UnsupportedOperationException();
     }
 

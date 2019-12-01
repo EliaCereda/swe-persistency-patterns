@@ -15,7 +15,16 @@
             border: 1px solid #AAA;
             padding: 5px;
         }
+        form {
+            display: inline;
+        }
     </style>
+
+    <script>
+        function deleteUser(username) {
+            return confirm("Are you sure you want to delete the user '" + username + "'?");
+        }
+    </script>
 </head>
 <body>
     <h1>Registered Users</h1>
@@ -38,8 +47,14 @@
                         <td><c:out value="${user.password}"/></td>
                         <td><c:out value="${user.name}"/></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/users/${user.username}">Update</a>
-                            <a href="${pageContext.request.contextPath}/users/${user.username}">Delete</a>
+                            <form action="${pageContext.request.contextPath}/users/${user.username}">
+                                <button type="submit">Update</button>
+                            </form>
+                            <form action="${pageContext.request.contextPath}/delete-user" method="post"
+                                  onsubmit="return deleteUser('${user.username}')">
+                                <input type="hidden" name="username" value="${user.username}">
+                                <button type="submit">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 </c:forEach>
