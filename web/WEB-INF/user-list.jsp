@@ -8,10 +8,10 @@
     <title>Registered Users</title>
 
     <style>
-        table{
+        table {
             border-collapse: collapse;
         }
-        table td {
+        td, th {
             border: 1px solid #AAA;
             padding: 5px;
         }
@@ -25,19 +25,22 @@
             <table>
                 <thead>
                 <tr>
-                    <td>Username</td>
-                    <td>Password</td>
-                    <td>Name</td>
-                    <td>Actions</td>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Name</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${users}" var="user">
                     <tr>
-                        <td><c:out value = "${user.username}"/></td>
-                        <td><c:out value = "${user.password}"/></td>
-                        <td><c:out value = "${user.name}"/></td>
-                        <td></td>
+                        <td><c:out value="${user.username}"/></td>
+                        <td><c:out value="${user.password}"/></td>
+                        <td><c:out value="${user.name}"/></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/users/${user.username}">Update</a>
+                            <a href="${pageContext.request.contextPath}/users/${user.username}">Delete</a>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>
