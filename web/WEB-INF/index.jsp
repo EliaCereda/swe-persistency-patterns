@@ -20,15 +20,6 @@
                 </form>
             </div>
 
-            <c:choose>
-                <c:when test="${auth.isAdmin}">
-                    <p>You are an admin!</p>
-                </c:when>
-                <c:otherwise>
-                    <p>You are a normal user.</p>
-                </c:otherwise>
-            </c:choose>
-
             <form action="<c:url value="/users"/>">
                 <button type="submit">Show User List</button>
             </form>

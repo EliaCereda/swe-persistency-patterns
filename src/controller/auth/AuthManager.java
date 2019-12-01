@@ -40,10 +40,6 @@ public class AuthManager {
         return getCurrentUser() != null;
     }
 
-    public boolean getIsAdmin() {
-        return false; //FIXME
-    }
-
     public boolean login(String username, String password) {
         User user = userRepository.findByUsername(username);
 

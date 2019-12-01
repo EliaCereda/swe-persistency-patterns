@@ -84,7 +84,7 @@
                             <form action="<c:url value="/users/${user.username}"/>">
                                 <button type="submit">Update</button>
                             </form>
-                            <form action="<c:url value="/delete-user"/>" method="post"
+                            <form action="<c:url value="/users-delete"/>" method="post"
                                   onsubmit="return deleteUser('${user.username}')">
                                 <input type="hidden" name="username" value="${user.username}">
                                 <button type="submit">Delete</button>

@@ -20,6 +20,12 @@ public class AuthorizationFilter implements Filter {
 
         request.setAttribute("auth", auth);
 
-        chain.doFilter(request, response);
+        String servletPath = request.getServletPath();
+
+        if (servletPath.startsWith("/users") && !auth.getIsAuthenticated()) {
+            response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            chain.doFilter(request, response);
+        }
     }
 }
