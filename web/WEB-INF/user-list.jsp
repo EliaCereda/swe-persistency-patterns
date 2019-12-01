@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--@elvariable id="users" type="java.util.List<model.User>"--%>
+<%--@elvariable id="users" type="java.util.Map<model.User>"--%>
 <%--@elvariable id="addresses" type="java.util.Map<String, model.Address>"--%>
 
 <%--@elvariable id="field" type="String"--%>
@@ -69,15 +69,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${users}" var="user">
+                <c:forEach items="${users.values()}" var="user">
                     <c:set var="address" value="${addresses.get(user.username)}" />
+                    <c:set var="bestFriend" value="${users.get(user.bestFriend)}" />
 
                     <tr>
                         <td><c:out value="${user.username}"/></td>
                         <td><c:out value="${user.password}"/></td>
                         <td><c:out value="${user.name}"/></td>
                         <td><c:out value="${address.streetAddress}" default="(none)"/></td>
-                        <td><c:out value="${user.bestFriend}" default="(none)" /></td>
+                        <td><c:out value="${bestFriend.name}" default="(none)" /></td>
                         <td class="actions">
                             <form action="${pageContext.request.contextPath}/users/${user.username}">
                                 <button type="submit">Update</button>

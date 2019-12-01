@@ -22,28 +22,32 @@ public class UserListController extends UserController {
         String field = req.getParameter("field");
         String query = req.getParameter("query");
 
-        List<User> users;
+        List<User> userList;
 
         if (field == null || query == null || "".equals(query)) {
-            users = userRepository.findAll();
+            userList = userRepository.findAll();
         } else {
             switch (field) {
                 case "name":
-                    users = userRepository.findAllByName(query);
+                    userList = userRepository.findAllByName(query);
                     break;
 
                 case "address":
-                    users = userRepository.findAllByStreetAddress(query);
+                    userList = userRepository.findAllByStreetAddress(query);
                     break;
 
                 case "best_friend":
-                    users = userRepository.findAllByBestFriend(query);
+                    userList = userRepository.findAllByBestFriend(query);
                     break;
 
                 default:
                     throw new UnsupportedOperationException();
             }
         }
+
+        Map<String, User> users = userList
+            .stream()
+            .collect(Collectors.toMap(User::getUsername, Function.identity()));
 
         Map<String, Address> addresses = addressRepository.findAll()
             .stream()
