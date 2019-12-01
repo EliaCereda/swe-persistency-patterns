@@ -21,6 +21,10 @@ public class Database {
             "street_address TEXT" +
         ");";
 
+    private static final String insertUsersStatement =
+        "INSERT OR IGNORE INTO users (username, password, name, best_friend) VALUES " +
+            "('elia', 'password', 'Elia Cereda', NULL);";
+
     private static boolean driverLoaded = false;
 
     // Singleton
@@ -31,6 +35,7 @@ public class Database {
         try {
             initialiseDatabase();
         } catch (SQLException e) {
+            // FIXME
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -53,10 +58,17 @@ public class Database {
             driverLoaded = true;
         }
 
-        try (Connection connection = DriverManager.getConnection(databaseURL)) {
+        try (Connection connection = getConnection()) {
             Statement stmt = connection.createStatement();
             stmt.execute(createUsersStatement);
             stmt.execute(createAddressesStatement);
+            stmt.execute(insertUsersStatement);
         }
+    }
+
+    // Connection Management
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(databaseURL);
     }
 }

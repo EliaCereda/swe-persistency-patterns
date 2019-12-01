@@ -3,13 +3,14 @@ package model.repository;
 import model.User;
 import model.db.Database;
 
-import javax.xml.crypto.Data;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository {
-
     private Database db;
 
     public UserRepository(Database db) {
@@ -18,8 +19,14 @@ public class UserRepository {
 
     // Data Mapping
 
-    private User load(ResultSet rs) {
-        throw new UnsupportedOperationException();
+    private User load(ResultSet rs) throws SQLException {
+        User user = new User();
+
+        user.setUsername(rs.getString("username"));
+        user.setPassword(rs.getString("password"));
+        user.setName(rs.getString("name"));
+
+        return user;
     }
 
     // Mutators
@@ -28,8 +35,24 @@ public class UserRepository {
 
     }
 
-    public void update(User user) {
+    private static final String updateQuery =
+        "UPDATE users " +
+                "SET password=?, name=? " +
+                "WHERE username = ?";
 
+    public void update(User user) {
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(updateQuery)) {
+
+            stmt.setString(1, user.getPassword());
+            stmt.setString(2, user.getName());
+            stmt.setString(3, user.getUsername());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
     }
 
     public void deleteByUsername(String username) {
@@ -38,26 +61,78 @@ public class UserRepository {
 
     // Queries
 
-    public List<User> findAll() {
-        User u1 = new User();
-        u1.setUsername("elia");
-        u1.setPassword("password");
-        u1.setName("Elia Cereda");
+    private static final String findAllQuery =
+        "SELECT * FROM users";
 
-        return List.of(u1);
+    public List<User> findAll() {
+        List<User> users = new ArrayList<>();
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(findAllQuery)) {
+
+            ResultSet results = stmt.executeQuery();
+
+            while (results.next()) {
+                User user = load(results);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
+
+        return users;
     }
+
+    private static final String findByUsernameQuery =
+        "SELECT * FROM users WHERE username = ?";
 
     public User findByUsername(String username) {
-        User u1 = new User();
-        u1.setUsername("elia");
-        u1.setPassword("password");
-        u1.setName("Elia Cereda");
+        User user = null;
 
-        return u1;
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(findByUsernameQuery)) {
+
+            stmt.setString(1, username);
+
+            ResultSet results = stmt.executeQuery();
+
+            if (results.next()) {
+                user = load(results);
+            }
+
+            assert !results.next();
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
+    private static final String findAllByNameQuery =
+        "SELECT * FROM users WHERE name = ?";
+
     public List<User> findAllByName(String name) {
-        throw new UnsupportedOperationException();
+        List<User> users = new ArrayList<>();
+
+        try (Connection connection = db.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(findAllByNameQuery)) {
+
+            stmt.setString(1, name);
+
+            ResultSet results = stmt.executeQuery();
+
+            while (results.next()) {
+                User user = load(results);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            // FIXME
+            e.printStackTrace();
+        }
+
+        return users;
     }
 
     public List<User> findAllByStreetAddress(String streetAddress) {
