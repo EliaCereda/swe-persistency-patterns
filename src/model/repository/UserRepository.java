@@ -42,7 +42,7 @@ public class UserRepository {
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
             stmt.setString(4, null);
-            // FIXME: add best friend and addresse
+            // FIXME: add best friend and address
 
             stmt.executeUpdate();
         } catch (SQLException e) {

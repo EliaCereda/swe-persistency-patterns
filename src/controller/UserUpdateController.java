@@ -1,26 +1,31 @@
 package controller;
 
 import model.User;
-import model.db.Database;
-import model.repository.UserRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/signup")
-public class UserSignup extends HttpServlet {
-    private UserRepository repository;
-
-    public UserSignup() {
-        repository = new UserRepository(Database.getInstance());
-    }
+@WebServlet("/users/*")
+public class UserUpdateController extends UserController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String url = req.getRequestURI();
+        String[] pathComponents = url.split("/");
+        String lastComponent = pathComponents[pathComponents.length - 1];
+
+        User user = repository.findByUsername(lastComponent);
+
+        if (user == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        req.setAttribute("user", user);
+
         getServletContext()
             .getRequestDispatcher("/WEB-INF/user-edit.jsp")
             .forward(req, resp);
@@ -32,12 +37,17 @@ public class UserSignup extends HttpServlet {
         String password = req.getParameter("password");
         String name = req.getParameter("name");
 
-        User user = new User();
-        user.setUsername(username);
+        User user = repository.findByUsername(username);
+
+        if (user == null) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         user.setPassword(password);
         user.setName(name);
 
-        repository.insert(user);
+        repository.update(user);
 
         resp.sendRedirect(req.getContextPath() + "/users");
     }
