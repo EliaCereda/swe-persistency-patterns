@@ -45,8 +45,8 @@ public class UserRepository extends Repository<User> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -66,8 +66,8 @@ public class UserRepository extends Repository<User> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -82,8 +82,7 @@ public class UserRepository extends Repository<User> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

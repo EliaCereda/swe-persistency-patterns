@@ -41,8 +41,7 @@ public class AddressRepository extends Repository<Address> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -60,8 +59,7 @@ public class AddressRepository extends Repository<Address> {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

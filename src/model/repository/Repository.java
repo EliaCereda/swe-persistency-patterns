@@ -39,8 +39,7 @@ public abstract class Repository<T> {
                 users.add(entity);
             }
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return users;

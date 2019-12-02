@@ -38,10 +38,9 @@ public class Database {
         try {
             initialiseDatabase();
         } catch (SQLException e) {
-            // FIXME
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
