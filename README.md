@@ -1,6 +1,10 @@
 # SWE Persistency Patterns
+**Software Engineering** — Assignment 8 — Elia Cereda  
+**Repository:** https://github.com/EliaCereda/swe-persistency-patterns
+
 The goal of this assignment is to design the architecture and provide a simple implementation for a web application that
 supports the following functionality:
+
 * Create, Read, Update and Delete (CRUD) operations for an entity that represents a user.
 * A login operation.
 * Search operations with three different search criteria: 
