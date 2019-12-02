@@ -23,7 +23,10 @@ public class Database {
 
     private static final String insertUsersStatement =
         "INSERT OR IGNORE INTO users (username, password, name, best_friend) VALUES " +
-            "('elia', 'password', 'Elia Cereda', NULL);";
+            "('elia', 'password', 'Elia Cereda', NULL), " +
+            "('mickey', 'password', 'Mickey Mouse', 'goofy'), " +
+            "('pluto', 'password', 'Pluto', 'mickey'), " +
+            "('goofy', 'password', 'Goofy', 'mickey');";
 
     private static boolean driverLoaded = false;
 

@@ -12,7 +12,7 @@ supports the following functionality:
 The first step in defining the architecture of the application has been to design its database schema. I tried to keep 
 the complexity of the schema as low as possible, while providing all the necessary to demonstrate the required 
 operations. The result can be seen in the figure below:
-![ER diagram of the database schema](docs/images/database.png)
+![ER diagram of the database schema](docs/diagrams/database.png)
 
 The technologies I adopted for this application are Java EE with Servlet and Java Server Pages. In addition, I used the 
 JSTL library to implement the template views and the SQLite JDBC driver to connect to the database. I chose to use 
@@ -35,7 +35,7 @@ without any knowledge of the database nor any business logic.
 * the `Repository` classes form the bridge between the database and the application code. Their resposibilities include 
 executing the SQL instructions to insert, modify and query the data and mapping between database records and Java objects.
 
-![Class diagram of the Model component](docs/images/model.png)
+![Class diagram of the Model component](docs/diagrams/model.png)
 
 ### Controller
 The Controller component is responsible for implementing the business logic of the application and coordinating the 
@@ -49,7 +49,7 @@ incoming requests and augments them with an `AuthManager` instance, containing i
 session. Furthermore, the filter implements access control, checking that the user has the privileges to access the 
 requested pages.
 
-![Class diagram of the Controller component](docs/images/controller.png)
+![Class diagram of the Controller component](docs/diagrams/controller.png)
 
 ### View
 The View component generates the final HTML code that is sent to the browser and shown to the user. It follows the 
@@ -60,3 +60,20 @@ The Controller responsible for a given page collects all the necessary dynamic i
 `ServletRequest` object. Then, using the JSP dispatcher, control is passed to the template which outputs them in the
 correct form.
 
+## User Interface
+Below are shown some screenshots that demonstrate the operation of the application.
+
+### Login
+![Screenshot of the Login page](docs/screenshots/login.png)
+
+### User List
+![Screenshot of the User List page](docs/screenshots/list.png)
+
+### Search Results
+![Screenshot of the Search Results page](docs/screenshots/search.png)
+
+### Delete User
+![Screenshot of the Delete User page](docs/screenshots/delete.png)
+
+### Update User
+![Screenshot of the Update User page](docs/screenshots/update.png)
