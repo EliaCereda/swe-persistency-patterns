@@ -22,10 +22,17 @@ The application follows the Model View Controller (MVC) architecture, which divi
 
 ### Model 
 The Model component is responsible for storing the application data in domain objects and persisting them to the 
-database. It is composed of three parts:
+database. I decided to model it upon the Row Data Gateway pattern, since I believe it does a better job than Active 
+Records at separating the persistency logic from the business logic in the code and it is somewhat simpler to implement. 
+It results in sligtly less convenience for the users of the code, but a more straightforward behavior in my opinion, with
+less hidden pitfalls.
+ 
+It is composed of three parts:
 * the `Database` class, which initialises the database and manages the database connections.
 * the `User` and `Address` classes, which correspond to the Gateway instances. They are Plain Old Java Objects (POJOs), 
-without any knowledge of the database and don't implement any business logic.
+without any knowledge of the database nor any business logic.
+* the `Repository` classes form the bridge between the database and the application code. Their resposibilities include 
+executing the SQL instructions to insert, modify and query the data and mapping between database records and Java objects.
 
 ![Class diagram of the Model component](docs/images/model.png)
 
